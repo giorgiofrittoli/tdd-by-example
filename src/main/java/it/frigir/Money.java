@@ -1,8 +1,6 @@
 package it.frigir;
 
-import java.util.Objects;
-
-public class Money {
+public class Money implements Expression {
 
     private int amount;
     private String currency;
@@ -20,8 +18,12 @@ public class Money {
         return new Money(amount, "CHF");
     }
 
+    public Expression plus(Money addend) {
+        return new Sum(this, addend);
+    }
+
     public Money times(int multiplier) {
-        return new Money(this.amount * multiplier,this.currency());
+        return new Money(this.amount * multiplier, this.currency());
     }
 
     public String currency() {
@@ -33,12 +35,15 @@ public class Money {
         if (this == o) return true;
         if (o == null) return false;
         Money money = (Money) o;
-        return getAmount() == money.getAmount() && currency().equals(money.currency);
+        return getAmount() == money.getAmount() && currency().equals(money.getCurrency());
     }
 
     @Override
-    public int hashCode() {
-        return Objects.hash(getAmount());
+    public String toString() {
+        return "Money{" +
+                "amount=" + amount +
+                ", currency='" + currency + '\'' +
+                '}';
     }
 
     public int getAmount() {
@@ -49,11 +54,16 @@ public class Money {
         this.amount = amount;
     }
 
+    public String getCurrency() {
+        return currency;
+    }
+
+    public void setCurrency(String currency) {
+        this.currency = currency;
+    }
+
     @Override
-    public String toString() {
-        return "Money{" +
-                "amount=" + amount +
-                ", currency='" + currency + '\'' +
-                '}';
+    public Money reduce(String to) {
+        return this;
     }
 }
