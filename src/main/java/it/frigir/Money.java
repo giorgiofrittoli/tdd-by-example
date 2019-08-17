@@ -2,9 +2,9 @@ package it.frigir;
 
 import java.util.Objects;
 
-public abstract class Money {
+public class Money {
 
-    protected int amount;
+    private int amount;
     private String currency;
 
     public Money(int amount, String currency) {
@@ -13,25 +13,27 @@ public abstract class Money {
     }
 
     public static Money dollar(int amount) {
-        return new Dollar(amount,"USD");
+        return new Dollar(amount, "USD");
     }
 
-    public static Money franc(int amount){
-        return new Franc(amount,"CHF");
+    public static Money franc(int amount) {
+        return new Franc(amount, "CHF");
     }
 
-    public abstract Money times(int multiplier);
+    public Money times(int multiplier) {
+        return new Money(this.amount * multiplier,this.currency());
+    }
 
-    public String currency(){
+    public String currency() {
         return currency;
     }
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (o == null) return false;
         Money money = (Money) o;
-        return getAmount() == money.getAmount();
+        return getAmount() == money.getAmount() && currency().equals(money.currency);
     }
 
 
@@ -48,4 +50,11 @@ public abstract class Money {
         this.amount = amount;
     }
 
+    @Override
+    public String toString() {
+        return "Money{" +
+                "amount=" + amount +
+                ", currency='" + currency + '\'' +
+                '}';
+    }
 }
